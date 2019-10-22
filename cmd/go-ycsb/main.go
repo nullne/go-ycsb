@@ -50,7 +50,7 @@ import (
 	// Register Badger database
 	_ "github.com/pingcap/go-ycsb/db/badger"
 	// Register RocksDB database
-	_ "github.com/pingcap/go-ycsb/db/rocksdb"
+	// _ "github.com/pingcap/go-ycsb/db/rocksdb"
 	// Register Spanner database
 	_ "github.com/pingcap/go-ycsb/db/spanner"
 	// Register pegasus database
@@ -65,6 +65,8 @@ import (
 	_ "github.com/pingcap/go-ycsb/db/redis"
 	// Register boltdb database
 	_ "github.com/pingcap/go-ycsb/db/boltdb"
+	// Register minio
+	_ "github.com/pingcap/go-ycsb/db/minio"
 )
 
 var (
