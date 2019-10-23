@@ -37,7 +37,7 @@ type contextKey string
 const stateKey = contextKey("core")
 
 type coreState struct {
-	r          *rand.Rand
+	r *rand.Rand
 	// fieldNames is a copy of core.fieldNames to be goroutine-local
 	fieldNames []string
 }

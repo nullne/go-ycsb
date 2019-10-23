@@ -3,8 +3,8 @@ package minio
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
+	"io/ioutil"
 
 	"github.com/magiconair/properties"
 	"github.com/minio/minio-go"
@@ -57,17 +57,17 @@ func (db *minioDB) CleanupThread(ctx context.Context) {
 // table: The name of the table.
 // key: The record key of the record to read.
 // fields: The list of fields to read, nil|empty for reading all.
-func (db *minioDB) Read(ctx context.Context, table string, key string, fields []string) (value map[string][]byte, err error) {
+func (db *minioDB) Read(ctx context.Context, table string, key string, fields []string) (map[string][]byte, error) {
 	obj, err := db.db.GetObjectWithContext(ctx, table, key, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
 	}
 	defer obj.Close()
-	decoder := json.NewDecoder(obj)
-	if err := decoder.Decode(&value); err != nil {
+	bs, err := ioutil.ReadAll(obj)
+	if err != nil {
 		return nil, err
 	}
-	return value, nil
+	return map[string][]byte{"field0": bs}, nil
 }
 
 // Scan scans records from the database.
@@ -85,13 +85,14 @@ func (db *minioDB) Scan(ctx context.Context, table string, startKey string, coun
 // key: The record key of the record to update.
 // values: A map of field/value pairs to update in the record.
 func (db *minioDB) Update(ctx context.Context, table string, key string, values map[string][]byte) error {
-	bs, err := json.Marshal(values)
-	if err != nil {
-		return err
+	var bs []byte
+	for _, v := range values {
+		bs = v
+		break
 	}
 	reader := bytes.NewBuffer(bs)
 	size := int64(len(bs))
-	_, err = db.db.PutObjectWithContext(ctx, table, key, reader, size, minio.PutObjectOptions{})
+	_, err := db.db.PutObjectWithContext(ctx, table, key, reader, size, minio.PutObjectOptions{})
 	return err
 }
 
