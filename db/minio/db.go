@@ -3,7 +3,6 @@ package minio
 import (
 	"bytes"
 	"context"
-	"errors"
 	"io/ioutil"
 
 	"github.com/magiconair/properties"
@@ -76,7 +75,19 @@ func (db *minioDB) Read(ctx context.Context, table string, key string, fields []
 // count: The number of records to read.
 // fields: The list of fields to read, nil|empty for reading all.
 func (db *minioDB) Scan(ctx context.Context, table string, startKey string, count int, fields []string) ([]map[string][]byte, error) {
-	return nil, errors.New("not implemented")
+	res := make([]map[string][]byte, count)
+	done := make(chan struct{})
+	defer close(done)
+	ch := db.db.ListObjectsV2(table, startKey, true, done)
+
+	for i := 0; i < count; i++ {
+		obj, ok := <-ch
+		if !ok {
+			break
+		}
+		res[i] = map[string][]byte{obj.Key: nil}
+	}
+	return res, nil
 }
 
 // Update updates a record in the database. Any field/value pairs will be written into the
