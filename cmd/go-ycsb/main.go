@@ -48,7 +48,7 @@ import (
 	// Register Aerospike database
 	_ "github.com/pingcap/go-ycsb/db/aerospike"
 	// Register Badger database
-	_ "github.com/pingcap/go-ycsb/db/badger"
+	// _ "github.com/pingcap/go-ycsb/db/badger"
 	// Register RocksDB database
 	// _ "github.com/pingcap/go-ycsb/db/rocksdb"
 	// Register Spanner database
@@ -67,6 +67,8 @@ import (
 	_ "github.com/pingcap/go-ycsb/db/boltdb"
 	// Register minio
 	_ "github.com/pingcap/go-ycsb/db/minio"
+	// Register volume
+	_ "github.com/pingcap/go-ycsb/db/volume"
 )
 
 var (

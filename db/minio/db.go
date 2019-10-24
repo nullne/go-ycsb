@@ -7,6 +7,7 @@ import (
 
 	"github.com/magiconair/properties"
 	"github.com/minio/minio-go"
+	"github.com/pingcap/go-ycsb/pkg/prop"
 	"github.com/pingcap/go-ycsb/pkg/ycsb"
 )
 
@@ -20,14 +21,21 @@ const (
 type minioCreator struct{}
 
 func (c minioCreator) Create(p *properties.Properties) (ycsb.DB, error) {
+
 	accessKeyID := p.GetString(minioAccessKey, "minio")
 	secretAccessKey := p.GetString(minioSecretKey, "myminio")
-	endpoint := p.GetString(minioEndpoint, "http://127.0.0.1:9000")
+	endpoint := p.GetString(minioEndpoint, "127.0.0.1:9000")
 	secure := p.GetBool(minioSecure, false)
 	client, err := minio.New(endpoint, accessKeyID, secretAccessKey, secure)
 	if err != nil {
 		return nil, err
 	}
+	if p.GetBool(prop.DropData, prop.DropDataDefault) {
+		// @TODO remove the minio bucket here
+		// client.RemoveBucket()
+	}
+	// create the bucket if not existed
+	// client.MakeBucket()
 	return &minioDB{
 		db: client,
 	}, nil
