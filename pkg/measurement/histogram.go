@@ -21,6 +21,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	humanize "github.com/dustin/go-humanize"
 	"github.com/magiconair/properties"
 	"github.com/pingcap/go-ycsb/pkg/util"
 	"github.com/pingcap/go-ycsb/pkg/ycsb"
@@ -109,15 +110,15 @@ func (h *histogram) Summary() string {
 	res := h.getInfo()
 
 	buf := new(bytes.Buffer)
-	buf.WriteString(fmt.Sprintf("Takes(s): %.1f, ", res[ELAPSED]))
-	buf.WriteString(fmt.Sprintf("Count: %d, ", res[COUNT]))
+	buf.WriteString(fmt.Sprintf("Takes: %s, ", res[ELAPSED]))
+	buf.WriteString(fmt.Sprintf("Count: %s, ", res[COUNT]))
 	buf.WriteString(fmt.Sprintf("OPS: %.1f, ", res[QPS]))
-	buf.WriteString(fmt.Sprintf("Avg(us): %d, ", res[AVG]))
-	buf.WriteString(fmt.Sprintf("Min(us): %d, ", res[MIN]))
-	buf.WriteString(fmt.Sprintf("Max(us): %d, ", res[MAX]))
-	buf.WriteString(fmt.Sprintf("99th(us): %d, ", res[PER99TH]))
-	buf.WriteString(fmt.Sprintf("99.9th(us): %d, ", res[PER999TH]))
-	buf.WriteString(fmt.Sprintf("99.99th(us): %d", res[PER9999TH]))
+	buf.WriteString(fmt.Sprintf("Avg(us): %s, ", res[AVG]))
+	buf.WriteString(fmt.Sprintf("Min(us): %s, ", res[MIN]))
+	buf.WriteString(fmt.Sprintf("Max(us): %s, ", res[MAX]))
+	buf.WriteString(fmt.Sprintf("99th(us): %s, ", res[PER99TH]))
+	buf.WriteString(fmt.Sprintf("99.9th(us): %s, ", res[PER999TH]))
+	buf.WriteString(fmt.Sprintf("99.99th(us): %s", res[PER9999TH]))
 
 	return buf.String()
 }
@@ -154,18 +155,18 @@ func (h *histogram) getInfo() map[string]interface{} {
 		}
 	}
 
-	elapsed := time.Now().Sub(h.startTime).Seconds()
-	qps := float64(count) / elapsed
+	elapsed := time.Now().Sub(h.startTime)
+	qps := float64(count) / elapsed.Seconds()
 	res := make(map[string]interface{})
-	res[ELAPSED] = elapsed
-	res[COUNT] = count
+	res[ELAPSED] = elapsed.Round(time.Second).String()
+	res[COUNT] = humanize.Comma(count)
 	res[QPS] = qps
-	res[AVG] = avg
-	res[MIN] = min
-	res[MAX] = max
-	res[PER99TH] = per99
-	res[PER999TH] = per999
-	res[PER9999TH] = per9999
+	res[AVG] = humanize.Comma(avg)
+	res[MIN] = humanize.Comma(min)
+	res[MAX] = humanize.Comma(max)
+	res[PER99TH] = humanize.Comma(int64(per99))
+	res[PER999TH] = humanize.Comma(int64(per999))
+	res[PER9999TH] = humanize.Comma(int64(per9999))
 
 	return res
 }
