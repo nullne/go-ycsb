@@ -30,7 +30,7 @@ func (c minioCreator) Create(p *properties.Properties) (ycsb.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if p.GetBool(prop.DropData, prop.DropDataDefault) {
+	if p.GetBool(prop.DropData, prop.DropDataDefault) && !p.GetBool(prop.DoTransactions, true) {
 		// @TODO remove the minio bucket here
 		// client.RemoveBucket()
 	}

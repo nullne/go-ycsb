@@ -29,7 +29,7 @@ func (c volumeCreator) Create(p *properties.Properties) (ycsb.DB, error) {
 
 	table := p.GetString(prop.TableName, "/tmp/volume-test")
 
-	if p.GetBool(prop.DropData, prop.DropDataDefault) {
+	if p.GetBool(prop.DropData, prop.DropDataDefault) && !p.GetBool(prop.DoTransactions, true) {
 		if err := os.RemoveAll(table); err != nil {
 			return nil, err
 		}
