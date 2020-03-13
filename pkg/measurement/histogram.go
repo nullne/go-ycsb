@@ -23,8 +23,8 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/magiconair/properties"
-	"github.com/pingcap/go-ycsb/pkg/util"
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/nullne/go-ycsb/pkg/util"
+	"github.com/nullne/go-ycsb/pkg/ycsb"
 )
 
 type histogram struct {

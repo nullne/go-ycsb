@@ -22,9 +22,9 @@ import (
 	"time"
 
 	"github.com/magiconair/properties"
-	"github.com/pingcap/go-ycsb/pkg/measurement"
-	"github.com/pingcap/go-ycsb/pkg/prop"
-	"github.com/pingcap/go-ycsb/pkg/ycsb"
+	"github.com/nullne/go-ycsb/pkg/measurement"
+	"github.com/nullne/go-ycsb/pkg/prop"
+	"github.com/nullne/go-ycsb/pkg/ycsb"
 )
 
 type worker struct {

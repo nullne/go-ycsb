@@ -23,7 +23,7 @@ import (
 // Row layout: colID1, value1, colID2, value2, ...
 // valBuf and values pass by caller, for reducing EncodeRow allocates temporary bufs. If you pass valBuf and values as nil,
 // EncodeRow will allocate it.
-// It is a simplified and specialized version of `github.com/pingcap/tidb/tablecodec.EncodeRow`.
+// It is a simplified and specialized version of `github.com/nullne/tidb/tablecodec.EncodeRow`.
 func EncodeRow(cols [][]byte, colIDs []int64, valBuf []byte) ([]byte, error) {
 	if len(cols) != len(colIDs) {
 		return nil, errors.Errorf("EncodeRow error: cols and colIDs count not match %d vs %d", len(cols), len(colIDs))
@@ -63,7 +63,7 @@ func appendVarint(b []byte, v int64) []byte {
 
 // DecodeRow decodes a byte slice into columns.
 // Row layout: colID1, value1, colID2, value2, .....
-// It is a simplified and specialized version of `github.com/pingcap/tidb/tablecodec.DecodeRow`.
+// It is a simplified and specialized version of `github.com/nullne/tidb/tablecodec.DecodeRow`.
 func DecodeRow(b []byte) (map[int64][]byte, error) {
 	row := make(map[int64][]byte)
 	if len(b) == 0 {
