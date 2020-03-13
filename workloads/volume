@@ -1,4 +1,0 @@
-table=/tmp/volume-test
-volume.index-root=/tmp/badger-index
-volume.index-db=rocksdb
-dropdata=true

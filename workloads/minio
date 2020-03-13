@@ -1,4 +1,0 @@
-minio.access-key=FIC9W3CX213T2GITB3II
-minio.secret-key=84f932a77839a99cbd4f80
-minio.endpoint=192.168.4.7:9000
-minio.secure=false
